@@ -1,0 +1,43 @@
+# ---------- secrets and local config (never commit) ----------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ---------- AI tools: personal files ----------
+CLAUDE.local.md
+.claude/settings.local.json
+
+# ---------- Node / TypeScript ----------
+node_modules/
+dist/
+build/
+.astro/
+.expo/
+coverage/
+*.tsbuildinfo
+npm-debug.log*
+pnpm-debug.log*
+.turbo/
+playwright-report/
+test-results/
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+.venv/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+*.egg-info/
+
+# ---------- OS / editors ----------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
