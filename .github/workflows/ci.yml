@@ -1,0 +1,91 @@
+# Generic CI: detects the project profile from the files present and runs only what applies.
+#   package.json   -> TypeScript profiles (Sistema, Site, Mobile): pnpm lint, typecheck, test
+#   pyproject.toml -> Automação profile (Python): ruff, mypy, pytest via uv
+# Commit messages are always checked (Conventional Commits, ADR 0004).
+# Each project must define the scripts "lint", "typecheck" and "test" in package.json
+# (or the tools in pyproject.toml). See docs/guias/como-iniciar-um-projeto.md.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      node: ${{ steps.detect.outputs.node }}
+      python: ${{ steps.detect.outputs.python }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: detect
+        run: |
+          [ -f package.json ] && echo "node=true" >> "$GITHUB_OUTPUT" || echo "node=false" >> "$GITHUB_OUTPUT"
+          [ -f pyproject.toml ] && echo "python=true" >> "$GITHUB_OUTPUT" || echo "python=false" >> "$GITHUB_OUTPUT"
+
+  commits:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Check Conventional Commits
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          if [ "$EVENT" = "pull_request" ]; then
+            range="$BASE_SHA..$HEAD_SHA"
+          elif [ -n "$BEFORE_SHA" ] && [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ]; then
+            range="$BEFORE_SHA..HEAD"
+          else
+            range="HEAD~1..HEAD"
+            git rev-parse -q --verify HEAD~1 >/dev/null || range="HEAD"
+          fi
+          status=0
+          for sha in $(git rev-list --no-merges "$range"); do
+            git log -1 --format=%B "$sha" > /tmp/msg
+            sh scripts/check-commit-msg.sh /tmp/msg || { echo "  in commit $sha"; status=1; }
+          done
+          exit $status
+
+  node:
+    needs: detect
+    if: needs.detect.outputs.node == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run lint
+      - run: pnpm run typecheck
+      - run: pnpm run test
+      # Perfil Sistema: uncomment after copying .dependency-cruiser.cjs (see docs/arquitetura/perfis/sistema/README.md).
+      # - run: pnpm exec depcruise apps packages
+
+  python:
+    needs: detect
+    if: needs.detect.outputs.python == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
+      - run: uv sync --locked
+      - run: uv run ruff format --check .
+      - run: uv run ruff check .
+      - run: uv run mypy .
+      - run: uv run pytest
