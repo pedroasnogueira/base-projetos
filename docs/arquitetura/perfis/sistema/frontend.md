@@ -98,7 +98,7 @@ Use a ferramenta certa para cada tipo de estado. A maioria dos bugs de frontend 
 ### Estilo e acessibilidade
 - Tailwind para estilos. Nada de CSS solto espalhado.
 - Todo campo tem `label`. Todo botão de ícone tem `aria-label`.
-- Pensado primeiro para celular e tablet (uso no balcão da loja).
+- Layout responsivo, pensado primeiro para a menor tela em que o sistema será usado (celular ou tablet, se for o caso).
 
 ---
 

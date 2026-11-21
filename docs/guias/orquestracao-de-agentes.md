@@ -113,8 +113,8 @@ FORMATO: padrão do explorador.
 - ❌ **Subagente implementando código.** Ele começa sem contexto, relê tudo e decide coisas sozinho (P2).
 - ❌ **Dois agentes editando ao mesmo tempo.** Geram conflitos de estilo e de decisão (P2).
 - ❌ **Haiku como sessão principal "para economizar".** Um modelo fraco no comando não sabe quando escalar (P6).
-- ❌ **Agent teams num projeto solo.** Custam cerca de 7x mais tokens que uma sessão normal [10].
-- ❌ **Agentes demais.** As descrições de todos eles ocupam contexto em toda sessão. Mantenha 4 a 6 [11].
+- ❌ **Agent teams num projeto solo.** Cada colega é uma instância separada, com contexto próprio: com os colegas em modo plano, o gasto chega a cerca de 7x o de uma sessão normal [10].
+- ❌ **Agentes demais.** As descrições de todos eles ocupam contexto em toda sessão, e a documentação pede descrições curtas [11]. O limite de 4 a 6 é uma decisão deste template (ADR 0003), não um número da documentação.
 - ❌ **Delegar sem briefing.** É a principal fonte de trabalho duplicado e de respostas fora do alvo (P8).
 - ❌ **Subagente devolvendo log inteiro.** Anula o motivo de ter delegado (P7).
 

@@ -3,7 +3,7 @@
 > Para scripts, rotinas agendadas, tratamento de dados, relatórios e integrações entre sistemas.
 
 ## Stack
-- **Python 3.12+**, com **uv** para gerenciar ambiente e dependências
+- **Python 3.14 ou mais recente** (versões conferidas em `docs/referencia/versoes.md`), com **uv** para gerenciar ambiente e dependências
 - **Ruff** (lint e formatação), **mypy** ou **pyright** (tipos), **pytest** (testes)
 - **Pydantic** para validar configuração e dados de entrada
 - **Typer** se o script tiver linha de comando com opções
