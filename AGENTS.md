@@ -49,7 +49,7 @@ O dono do projeto precisa entender e saber explicar tudo o que o projeto faz. Po
 - Planos, ADRs e documentos em arquivo não têm limite de linhas.
 
 ## Commits
-Conventional Commits (`feat`, `fix`, `docs`, `refactor`, `test`, `chore`). O corpo explica **por quê**, não o quê.
+Conventional Commits (`feat`, `fix`, `docs`, `refactor`, `test`, `chore`). O corpo explica **por quê**, não o quê. Validados por `.githooks/commit-msg` e no CI (ADR 0004).
 
 ## Onde fica cada coisa
 - Decisões: `docs/adr/` · Planos: `docs/planos/` · Diário: `docs/devlog/`

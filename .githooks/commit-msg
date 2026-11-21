@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+# Git hook: validates the commit message before the commit is created.
+# Enabled by scripts/init.sh (git config core.hooksPath .githooks).
+exec "$(git rev-parse --show-toplevel)/scripts/check-commit-msg.sh" "$1"
