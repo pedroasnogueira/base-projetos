@@ -10,6 +10,10 @@ TypeScript de ponta a ponta, num monorepo com pnpm workspaces:
 - **Compartilhado:** `packages/contracts` com os schemas Zod usados pelos dois lados
 - **Testes:** Vitest, Testing Library, Playwright
 - **Qualidade:** ESLint, Prettier, TypeScript `strict`, `dependency-cruiser`
+- **Versões:** ver [`docs/referencia/versoes.md`](../../../referencia/versoes.md). Atenção: por enquanto, TypeScript 6.0, não 7.0.
+
+## Fronteiras checadas no CI
+Copie [`dependency-cruiser.exemplo.cjs`](dependency-cruiser.exemplo.cjs) para a raiz como `.dependency-cruiser.cjs` e ative a linha `depcruise` no `.github/workflows/ci.yml`. Ele bloqueia as importações proibidas descritas em `backend.md` e `frontend.md` (seção 2 de cada).
 
 ## Arquitetura: monólito modular
 Um código só e um deploy só, mas dividido em módulos com fronteiras rígidas. A Shopify seguiu esse caminho em vez de migrar para microsserviços: o código fica numa base só, com fronteiras definidas e respeitadas entre os componentes. Você ganha a simplicidade do monólito e o isolamento dos microsserviços. Se um dia um módulo precisar virar serviço, as fronteiras já estão prontas.
