@@ -1,0 +1,5 @@
+# Normalize line endings in the repository.
+* text=auto
+# Shell scripts and git hooks must keep LF, or sh fails on Windows checkouts ("\r: command not found").
+*.sh text eol=lf
+.githooks/* text eol=lf
